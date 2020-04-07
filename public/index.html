@@ -6,8 +6,16 @@
   <meta name="author" content="Christopher Coballes"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
+  <link rel="stylesheet" type="text/css" href="css/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="css/rangeslider.css">
+  <link rel="stylesheet" type="text/css" href="css/default.css"/>
+  <link rel="stylesheet" href="css/style.css"/> 
 
-  <link rel="stylesheet" href="css/style.css"/>
+ <!-- Use Slider -->
+  <script type="text/javascript" src="js/slider/jquery.min.js"></script>
+  <script type="text/javascript" src="js/slider/rangeslider.js"></script>
+  <script type="text/javascript" src="js/slider/rangeslider.min.js"></script>
+  <script type="text/javascript" src="js/slider/slider.js"></script>
 
   <!-- Include JQuery for interface -->
   <script src="js/jquery.min.js"></script>
@@ -58,6 +66,10 @@
 									<div id="drive_power_slider"></div>
 									<button type="button" id="set_drive_power">Set</button>
 									<br /><br />
+
+  								        <!--        Insert                           -->
+                                                                     <!--        Insert                           -->  
+                                                            
 									LED Control:<br /> 
 									  <input type='text' class="basic" />
 									  <button type="button" id="off">Off</button>
@@ -67,6 +79,7 @@
 								  <div id="container">
 								 <!--   <div id="remote">-->
 									  <video id="remote-video" autoplay="" style="border:1px solid" width="640" height="480">
+											source = http://localhost:8050/stream							
 										Your browser does not support the video tag.
 									  </video>
 								  <!--  </div> -->
@@ -139,20 +152,24 @@
 							}).mouseup(function () {
 								socket.emit('randy command', { command: 'stop' });
 							});
-
-							//var robot_drive_power;
+    //var robot_drive_power;
 							$(function() {
 								$( "#drive_power_slider" ).slider({
 									range: "min",
-									value: 10,
+									value: 70,
 									min: 0,
-									max: 22,
+									max: 150,
 									slide: function( event, ui ) {
 										$( "#drive_power" ).val( ui.value );
-									}
-								});
-								$( "#drive_power" ).val( $( "#drive_power_slider" ).slider( "value" ) );
-							});
+									var robot_drive_power= ui.value;
+                                                                         socket.emit('randy command', { 
+									    command: 'set_power', 
+									    power: robot_drive_power 
+								               });
+									     }
+								        });
+                                                             	$( "#drive_power" ).val( $( "#drive_power_slider" ).slider( "value" ) );
+							        });  // slider1
 
 							$('#set_drive_power').click(function () {
 								console.log("Button Clicked");
@@ -186,9 +203,11 @@
 									blue: 0
 								});
 							});
-					/*  Functions for Toggle */
-
-			</script>
+//-------------------------------------------------------------------Clock-----------------------------------------------------------  						
+  //-------------------------------------------------------------------SLIDER-----------------------------------------------------------  
+                                                  
+					
+	</script>
   </div>
 </body>
 </html>

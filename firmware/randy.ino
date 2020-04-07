@@ -1,14 +1,13 @@
-/* Hi=Techno Barrio  
-by:
-Christopher Coballes
-*/
-
-// Reserve parameters
+// Sabertooth 2x5 controls the drive motor with one 8 byte character.
+// Sending a character between 1 and 127 controls the speed and direction of the motor.
+// Backward is 0, Forward is 127, and 64 is Stop
 #define BACKWARD 0
 #define STOP 64
 #define FORWARD 127
 #define RANGE 63
 
+// Servo used to steer the vehicle. Center is 50 degrees, full left is 50 degrees,
+// full right is 130 degrees. 
 #define LEFT 50
 #define CENTER 90
 #define RIGHT 130+10 // Extra 10 degrees compensation because steering is slightly off center
@@ -28,7 +27,7 @@ Servo steering;
 
 // Drive power for robot. Low by default.
 int drivePower = 14;
-
+#define BRAKE 0
 #define CW    1
 #define CCW   2
 #define CS_THRESHOLD 15   // Definition of safety current (Check: "1.3 Monster Shield Example").
