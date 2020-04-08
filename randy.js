@@ -1,4 +1,8 @@
-
+/*
+Hi-Techno Barrio
+by:
+  Christopher Coballes
+*/
 
 // Initialize express and server
 var express = require('express'),
@@ -9,7 +13,11 @@ var express = require('express'),
 	io = require('socket.io').listen(server),
         SerialPort = require("serialport");
 
-
+/*
+var serialport = require('serialport'); // include the library
+var SerialPort = serialport.SerialPort; // make a local instance
+var portName = process.argv[2]; // get port name from the command line:
+var sp = new SerialPort(portName, {  */
 
 //init for SerialPort connected to Arduino
 var serialPort = new SerialPort('/dev/ttyACM0',
@@ -19,12 +27,7 @@ var serialPort = new SerialPort('/dev/ttyACM0',
         stopBits: 1,
         flowControl: false
     });
-/*
-serialPort.on("open", function () {
-    console.log('serialPort open');
-    serialPort.write("LEDOFF\n");
-});
-*/
+
 //Display my IP
 var networkInterfaces=os.networkInterfaces();
 
@@ -52,10 +55,26 @@ app.get('/', function (req, res) {
   	res.sendfile(__dirname + '/index.html');
 });
 
+var robot_drive_power = 14 ;
+// CTRL: control, SLCT: slector,PWR: power,ENDR: ender
 
+function sendPacket( CTRL,SLCT,PWR,ENDR)
+{
+   var PACKET_SIZE = 4;
+   var packet = new Uint8Array( PACKET_SIZE );
+   packet[0] = CTRL; // Byte code for robot control ( 'r' in ASCII )
+   packet[1] = SLCT; // f in ASCII
+   packet[2] = PWR
+   packet[3] = ENDR;
 
-
-
+// Send packet over serial
+   console.log('Sending Packet');
+   serialPort.write( packet );
+    for( i = 0; i < PACKET_SIZE; i++ ) {
+	console.log( packet[i] );
+		}
+	console.log('Packet Sent');
+}
 io.sockets.on('connection', function (socket) {
 
        //Set the current common status to the new client
@@ -65,53 +84,61 @@ io.sockets.on('connection', function (socket) {
 	  socket.on('randy command', function (data) {
 	    console.log(data);
 	    var command = data.command;
-              switch  (command)
+            robot_drive_power = data.power;
+		
+           switch  (command)
 	    {
 
            case  'forward' :
 	          console.log("Forward");
-	          //commonStatus = 'OFF';
-	         //serialPort.write("LEDON\n");
-              break;
-			  
+                  sendPacket( 114,102,robot_drive_power,0); // f in ASCII
+                  break;
+	  
            case  'left' :
 	          console.log("Left");
-	          //commonStatus = 'OFF';
-	         //serialPort.write("LEDON\n");
-              break;
+                        sendPacket( 114,108,robot_drive_power,0);// l in ASCII
+                   break;
 			  
            case  'center' :
 	          console.log("Center");
-	          //commonStatus = 'OFF';
-	         //serialPort.write("LEDON\n");
-              break;
+	                 sendPacket( 114,99,robot_drive_power,0); // c in ASCII
+		         break;
 			  
            case  'right' :
 	          console.log("Right");
-	          //commonStatus = 'OFF';
-	         //serialPort.write("LEDON\n");
-              break;
+                        sendPacket( 114,114,robot_drive_power,0);// r in ASCII
+                        break;
 			  
-           case  'power' :
-	          console.log("Power");
-	          //commonStatus = 'OFF';
-	         //serialPort.write("LEDON\n");
-              break;	
+		 case 'backward':  
+			sendPacket( 114,98,robot_drive_power,0) ;// b in ASCII
+                        break;
+           case  'stop' :
+	          console.log("Stop");
+	                 sendPacket( 114,115,robot_drive_power,0) ;// s in ASCII
+                  break;	
 			  
-           case  'forward' :
-	          console.log("ON-> OFF");
-	          //commonStatus = 'OFF';
-	         //serialPort.write("LEDON\n");
-              break;			  
-	     
+          case 'set_power':
+		    	// javascript is handling the command and just passing it to node.js
+                        sendPacket( 114,115,robot_drive_power,0) ;// s in ASCII
+			break;
+
+	  case 'LED': 
+                   console.log("Stop");
+                      sendPacket( 108,data.red,data.green,data.blue) ;
+		      break;	  
+	  
 	    }  //switches    
+		
 	    
          });
 
-    //Info all clients if this client disconnect
-    socket.on('disconnect', function () {
+          //Info all clients if this client disconnect
+           socket.on('disconnect', function () {
            });
 });
+
+
+
 
 
 
