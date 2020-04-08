@@ -134,7 +134,7 @@
 								emitNode('left');
 							}).mouseup(function () {
 								console.log("Button Released");
-								socket.emit('randy command', { command: 'stop' });        
+								emitNode('stop');          
 							});
 
 						$('#robot_center').mousedown(function () {
@@ -142,12 +142,12 @@
 								emitNode('center');
 							}).mouseup(function () {
 								console.log("Button Released");
-								socket.emit('randy command', { command: 'stop' });        
+								emitNode('stop');       
 							});
 
 							$('#robot_stop').click(function () {
 								console.log("Button Clicked");
-								socket.emit('randy command', { command: 'stop' });
+								emitNode('stop');  
 							});
 
 							$('#robot_right').mousedown(function () {
@@ -155,15 +155,14 @@
 								emitNode('right');
 							}).mouseup(function () {
 								console.log("Button Released");
-								socket.emit('randy command', { command: 'stop' });        
+								emitNode('stop');          
 							});
 
 							$('#robot_backward').mousedown(function () {
 								console.log("Button Pressed");
 								emitNode('backward');
 							}).mouseup(function () {
-								socket.emit('randy command', { command: 'stop' });
-							});
+								emitNode('stop');  							});
 
 							$(function() {
 								$( "#drive_power_slider" ).slider({
