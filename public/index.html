@@ -64,10 +64,10 @@
 									  <input type="text" id="drive_power" readonly style="border:0; color:#f6931f; font-weight:bold;">
 									</p>
 									<div id="drive_power_slider"></div>
-									<button type="button" id="set_drive_power">Set</button>
+									
 									<br /><br />
 
-  								        <!--        Insert                           -->
+  								     <!--        Insert                           -->
                                                                      <!--        Insert                           -->  
                                                             
 									LED Control:<br /> 
@@ -98,9 +98,21 @@
 					  </div>
 			 </section>
 			<script>
+                                           
+                                         function emitNode(inCommand)
+                                         {
+                                           var robot_drive_power = $( "#drive_power_slider" ).slider( "value" );
+								socket.emit('randy command', { 
+									command: inCommand, 
+									power: robot_drive_power 
+								});
+
+                                            }
+
 
 					/* Parameters/Variables */
 					   var socket = io.connect(document.location.href);
+
 					   var myId;
 						 socket.on('randy connected', function (data) {
 								console.log(data);
@@ -111,15 +123,15 @@
 							// These buttons control the movement of the robot
 							$('#robot_forward').mousedown(function () {
 								console.log("Button Pressed");
-								socket.emit('randy command', { command: 'forward' });
+                                                                    emitNode('forward');
 							}).mouseup(function () {
 								console.log("Button Released");
-								socket.emit('randy command', { command: 'stop' });        
+								emitNode('stop');    
 							});
 
 							$('#robot_left').mousedown(function () {
 								console.log("Button Pressed");
-								socket.emit('randy command', { command: 'left' });
+								emitNode('left');
 							}).mouseup(function () {
 								console.log("Button Released");
 								socket.emit('randy command', { command: 'stop' });        
@@ -127,7 +139,7 @@
 
 						$('#robot_center').mousedown(function () {
 								console.log("Button Pressed");
-								socket.emit('randy command', { command: 'center' });
+								emitNode('center');
 							}).mouseup(function () {
 								console.log("Button Released");
 								socket.emit('randy command', { command: 'stop' });        
@@ -140,7 +152,7 @@
 
 							$('#robot_right').mousedown(function () {
 								console.log("Button Pressed");
-								socket.emit('randy command', { command: 'right' });
+								emitNode('right');
 							}).mouseup(function () {
 								console.log("Button Released");
 								socket.emit('randy command', { command: 'stop' });        
@@ -148,11 +160,11 @@
 
 							$('#robot_backward').mousedown(function () {
 								console.log("Button Pressed");
-								socket.emit('randy command', { command: 'backward' });
+								emitNode('backward');
 							}).mouseup(function () {
 								socket.emit('randy command', { command: 'stop' });
 							});
-    //var robot_drive_power;
+
 							$(function() {
 								$( "#drive_power_slider" ).slider({
 									range: "min",
@@ -164,25 +176,14 @@
 									var robot_drive_power= ui.value;
                                                                          socket.emit('randy command', { 
 									    command: 'set_power', 
-									    power: robot_drive_power 
+									    power: robot_drive_power  
 								               });
 									     }
 								        });
                                                              	$( "#drive_power" ).val( $( "#drive_power_slider" ).slider( "value" ) );
 							        });  // slider1
 
-							$('#set_drive_power').click(function () {
-								console.log("Button Clicked");
-								var robot_drive_power = $( "#drive_power_slider" ).slider( "value" );
-
-								socket.emit('randy command', { 
-									command: 'set_power', 
-									power: robot_drive_power 
-								});
-							});
-
-
-							// Control LED Color
+                                			// Control LED Color
 							$(".basic").spectrum({
 								color: "#000",
 								change: function (color) {
@@ -203,7 +204,7 @@
 									blue: 0
 								});
 							});
-//-------------------------------------------------------------------Clock-----------------------------------------------------------  						
+					
   //-------------------------------------------------------------------SLIDER-----------------------------------------------------------  
                                                   
 					
