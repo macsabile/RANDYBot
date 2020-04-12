@@ -1,16 +1,16 @@
 // Sabertooth 2x5 controls the drive motor with one 8 byte character.
 // Sending a character between 1 and 127 controls the speed and direction of the motor.
 // Backward is 0, Forward is 127, and 64 is Stop
-#define BACKWARD 0
-#define STOP 64
-#define FORWARD 127
-#define RANGE 63
+//#define BACKWARD 0
+//#define STOP 64
+//#define FORWARD 127
+//#define RANGE 63
 
 // Servo used to steer the vehicle. Center is 50 degrees, full left is 50 degrees,
 // full right is 130 degrees. 
-#define LEFT 50
-#define CENTER 90
-#define RIGHT 130+10 // Extra 10 degrees compensation because steering is slightly off center
+//#define LEFT 50
+//#define CENTER 90
+//#define RIGHT 130+10 // Extra 10 degrees compensation because steering is slightly off center
 
 // LED Pins
 #define RED_LED_PIN 8
@@ -18,12 +18,12 @@
 #define BLUE_LED_PIN 10
 
 // Steering Servo Pin
-#define STEERING_PIN 7
+//#define STEERING_PIN 7
 
-#include <Servo.h>
+//#include <Servo.h>
 
-int servo_pos = 90;
-Servo steering;
+//int servo_pos = 90;
+//Servo steering;
 
 // Drive power for robot. Low by default.
 int drivePower = 14;
@@ -41,12 +41,11 @@ int drivePower = 14;
 #define PWM_MOTOR_1 3 // 5
 #define PWM_MOTOR_2 4 // 6
 
-
 #define MOTOR_1 0
 #define MOTOR_2 1
 
 short usSpeed = 150;  //default motor speed
-//unsigned short usMotor_Status = BRAKE;
+unsigned short usMotor_Status = BRAKE;
 
 void setup()
 {
@@ -67,29 +66,28 @@ void loop()
         Serial.readBytes( buff, 4 );
     }
   
-     switch( buff[1] ) {
-		 case 'r' 
+     switch( buff[1] ) { //case 'r' 
     
         drivePower = buff[2];
         
         switch( buff[1] ) 
 		{
           case 'f':
-             forward(drivePower);
+             Forward(drivePower);
             break;
           case 'l':
             //steering.write( LEFT );
-            left(drivePower);
+            Left(drivePower);
             break;
           case 'r':
             //steering.write( RIGHT );
-            right(drivePower);
+            Right(drivePower);
             break;
           case 'b':
-            reverse(drivePower);
+            Reverse(drivePower);
             break;
-          case 's':
-            stop (drivePower);
+          case 'c':
+            Center (drivePower);
             break;
          }
       break ;
@@ -101,7 +99,7 @@ void loop()
         analogWrite(BLUE_LED_PIN, buff[3]);
 		break;
 	 default :
-         stop (drivePower);
+         Stop (drivePower);
 	 }
 }  // loop
 
@@ -109,10 +107,16 @@ void Stop(short usSpeed)
 {
   Serial.println("Stop");
   usMotor_Status = BRAKE;
-  motorGo(MOTOR_1, usMotor_Status, usSPeed);
-  motorGo(MOTOR_2, usMotor_Status, int usSpeed);
+  motorGo(MOTOR_1, usMotor_Status, usSpeed);
+  motorGo(MOTOR_2, usMotor_Status, usSpeed);
 }
-
+void Center(short usSpeed)
+{
+  Serial.println("Stop");
+  usMotor_Status = BRAKE;
+  motorGo(MOTOR_1, usMotor_Status, usSpeed);
+  motorGo(MOTOR_2, usMotor_Status,  usSpeed);
+}
 void Forward(short usSpeed)
 {
   Serial.println("Forward");
