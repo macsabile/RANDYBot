@@ -1,32 +1,13 @@
-// Sabertooth 2x5 controls the drive motor with one 8 byte character.
-// Sending a character between 1 and 127 controls the speed and direction of the motor.
-// Backward is 0, Forward is 127, and 64 is Stop
-//#define BACKWARD 0
-//#define STOP 64
-//#define FORWARD 127
-//#define RANGE 63
-
-// Servo used to steer the vehicle. Center is 50 degrees, full left is 50 degrees,
-// full right is 130 degrees. 
-//#define LEFT 50
-//#define CENTER 90
-//#define RIGHT 130+10 // Extra 10 degrees compensation because steering is slightly off center
-
-// LED Pins
-#define RED_LED_PIN 8
-#define GREEN_LED_PIN 9
-#define BLUE_LED_PIN 10
-
-// Steering Servo Pin
-//#define STEERING_PIN 7
-
-//#include <Servo.h>
-
-//int servo_pos = 90;
-//Servo steering;
+/*
+ * 
+ * Christopher Coballes
+ * Hi-Techno Barrio
+ */
 
 // Drive power for robot. Low by default.
 int drivePower = 14;
+int led = 13 ;
+
 #define BRAKE 0
 #define CW    1
 #define CCW   2
@@ -58,50 +39,83 @@ void setup()
 }
   
 void loop()
+{  
+}  // loop
+
+void serialEvent()
 {
-    // Read in the 4-byte serial packet
+// Read in the 4-byte serial packet
   char buff[4];
     if( Serial.available() >= 4 )
     { 
         Serial.readBytes( buff, 4 );
     }
-  
-     switch( buff[1] ) { //case 'r' 
-    
-        drivePower = buff[2];
-        
-        switch( buff[1] ) 
-		{
-          case 'f':
-             Forward(drivePower);
-            break;
-          case 'l':
-            //steering.write( LEFT );
-            Left(drivePower);
-            break;
-          case 'r':
-            //steering.write( RIGHT );
-            Right(drivePower);
-            break;
-          case 'b':
-            Reverse(drivePower);
-            break;
-          case 'c':
-            Center (drivePower);
-            break;
-         }
+     drivePower = byteToInt(buff[2]);
+     switch( buff[0] ) { //case 'r'          
+        case 'r' :
+            switch( buff[1] ) 
+                   {
+                  case 'f':
+                      Forward(drivePower);
+                      analogWrite(led,drivePower*4); 
+                      Serial.println(drivePower );
+                    break;
+                    
+                  case 'l':
+                      Left(drivePower);
+                      analogWrite(led,drivePower*2);
+                      Serial.println(drivePower );
+                    break;
+                    
+                  case 'c':
+                      Center (drivePower);
+                      analogWrite(led,drivePower*3);
+                      Serial.println(drivePower );
+                    break;
+                    
+                  case 'r':
+                      Right(drivePower);
+                      analogWrite(led,drivePower*1.5);
+                      Serial.println(drivePower );
+                    break;
+                    
+                  case 'b':
+                       Reverse(drivePower);
+                       analogWrite(led,drivePower*2.5);
+                       Serial.println(drivePower );
+                    break;
+                    
+                  case 's':
+                       Stop(drivePower);
+                       analogWrite(led,drivePower*0);
+                       Serial.println(drivePower );
+                    break;
+                 } // dHead
       break ;
-	  // other command possible 
-	  case 'l' :
-    
-        analogWrite(RED_LED_PIN, buff[1]);
-        analogWrite(GREEN_LED_PIN, buff[2]);
-        analogWrite(BLUE_LED_PIN, buff[3]);
-		break;
-	 default :
-         Stop (drivePower);
-	 }
-}  // loop
+    // other command possible 
+     case 'l' :
+          analogWrite(led,drivePower*0);
+      break;
+   }
+  
+}
+//  127 /-128 = 255 brute force to integer
+int  byteToInt( char drive)
+{ 
+   int tempInt, finalInt ;
+   tempInt = drive;
+   tempInt  = (int) tempInt;
+   if  (tempInt < 0)
+   {
+    finalInt = 256 + tempInt ;
+   }
+   else
+   {
+    finalInt = tempInt;
+   }
+ return finalInt; 
+}
+
 
 void Stop(short usSpeed)
 {
@@ -155,43 +169,41 @@ void motorGo(uint8_t motor, uint8_t direct, uint8_t pwm)
 {
   if(motor == MOTOR_1)
   {
-    if(direct == CW)
-    {
-      digitalWrite(MOTOR_A1_PIN, LOW); 
-    
-    }
-    else if(direct == CCW)
-    {
-      digitalWrite(MOTOR_A1_PIN, HIGH);
-    
-    }
-    else
-    {
+     switch (direct)
+     { 
+     case  CW :
       digitalWrite(MOTOR_A1_PIN, LOW);
-          
-    }
-    
-    analogWrite(PWM_MOTOR_1, pwm); 
-  }
+      break;     
+     
+     case  CCW:
+      digitalWrite(MOTOR_A1_PIN, HIGH);    
+      break;
+      
+     case BRAKE :
+       digitalWrite(MOTOR_A1_PIN, LOW);
+       break;
+      } // direction
+       analogWrite(PWM_MOTOR_1, pwm); 
+  }  
   else if(motor == MOTOR_2)
   {
-    if(direct == CW)
-    {
+     switch(direct)
+     { 
+     case  CW :
       digitalWrite(MOTOR_A2_PIN, LOW);
-    
-    }
-    else if(direct == CCW)
-    {
-      digitalWrite(MOTOR_A2_PIN, HIGH);
+      break;     
+     
+     case  CCW:
+      digitalWrite(MOTOR_A2_PIN, HIGH);    
+      break;
       
-    }
-    else
-    {
-      digitalWrite(MOTOR_A2_PIN, LOW);
-           
-    }
-    
-    analogWrite(PWM_MOTOR_2, pwm);
-  }
-}
+     case BRAKE :
+       digitalWrite(MOTOR_A2_PIN, LOW);
+       break;
+        } // direction
+     
+       analogWrite(PWM_MOTOR_2, pwm);     
+       }
+   
+} // MOTOR GO!
 
