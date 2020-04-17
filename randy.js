@@ -11,7 +11,10 @@ var express = require('express'),
         os = require('os'),
 	server = require('http').createServer(app),
 	io = require('socket.io').listen(server),
+        arduinoMessage = '',
+        receivedData = "";
         SerialPort = require("serialport");
+
 
 /*
 var serialport = require('serialport'); // include the library
@@ -19,14 +22,34 @@ var SerialPort = serialport.SerialPort; // make a local instance
 var portName = process.argv[2]; // get port name from the command line:
 var sp = new SerialPort(portName, {  */
 
+//var Readline = SerialPort.parsers.Readline;
+
+
 //init for SerialPort connected to Arduino
 var serialPort = new SerialPort('/dev/ttyACM0',
-    {   baudRate: 9600,
+    {   baudRate: 115200,
         dataBits: 8,
         parity: 'none',
         stopBits: 1,
-        flowControl: false
+        flowControl: false  //
+       // parser: new serialPort.parsers.Readline("\n")
     });
+
+//Debug Serial Messages
+ var serialDebugger = function(buffer, socket) {
+    // concatenating the string buffers sent via usb port
+    arduinoMessage += buffer.toString();
+
+    // detecting the end of the string
+    if (arduinoMessage.indexOf('\r') >= 0) {
+      // log the message into the terminal
+         console.log(arduinoMessage);
+      // send the message to the client
+      //socket.volatile.emit('notification', arduinoMessage); // going to web page!
+      // reset the output string to an empty value
+      arduinoMessage = '';
+    }
+  };
 
 //Display my IP
 var networkInterfaces=os.networkInterfaces();
@@ -44,7 +67,6 @@ for (var interface in networkInterfaces) {
 }
 
 //All clients have a common status
-//var commonStatus = 'ON';
 server.listen(4050);
 
 // Set '/public' as the static folder. Any files there will be directly sent to the viewer
@@ -55,8 +77,9 @@ app.get('/', function (req, res) {
   	res.sendfile(__dirname + '/index.html');
 });
 
+
 var robot_drive_power = 14 ;
-// CTRL: control, SLCT: slector,PWR: power,ENDR: ender
+// CTRL: control, SLCT: slector,PWR: power,ENDR: 
 
 function sendPacket( CTRL,SLCT,PWR,ENDR)
 {
@@ -64,8 +87,8 @@ function sendPacket( CTRL,SLCT,PWR,ENDR)
    var packet = new Uint8Array( PACKET_SIZE );
    packet[0] = CTRL; // Byte code for robot control ( 'r' in ASCII )
    packet[1] = SLCT; // f in ASCII
-   packet[2] = PWR
-   packet[3] = ENDR;
+   packet[2] = PWR   // integer as value of PWM
+   packet[3] = ENDR; // NULL
 
 // Send packet over serial
    console.log('Sending Packet');
@@ -75,6 +98,8 @@ function sendPacket( CTRL,SLCT,PWR,ENDR)
 		}
 	console.log('Packet Sent');
 }
+
+
 io.sockets.on('connection', function (socket) {
 
        //Set the current common status to the new client
@@ -137,6 +162,18 @@ io.sockets.on('connection', function (socket) {
            });
 });
 
+  // listen all the serial port messages sent from arduino and passing them to the proxy function sendMessage
+     serialPort.on('data', function(data) { 
+	         receivedData += data.toString();
+                  console.log("Here!" + data);
+                  receivedData = '';
+		  });  
+
+//var parser = new Readline();
+// serialPort.pipe(parser);
+// parser.on('data', function (data) {
+// console.log('data received: ' + data)
+//})
 
 
 
