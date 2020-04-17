@@ -14,24 +14,26 @@ int led = 13 ;
 #define CS_THRESHOLD 15   // Definition of safety current (Check: "1.3 Monster Shield Example").
 
 //MOTOR 1
-#define MOTOR_A1_PIN 2 //7
+#define MOTOR_A1_PIN 4 //DIR1 7
 
 //MOTOR 2
-#define MOTOR_A2_PIN  6// 4
+#define MOTOR_A2_PIN  6// DR2 4
 
-#define PWM_MOTOR_1 3 // 5
-#define PWM_MOTOR_2 4 // 6
+#define PWM_MOTOR_1 5 // PWM1 5
+#define PWM_MOTOR_2 7 // PWM2 6
 
 #define MOTOR_1 0
 #define MOTOR_2 1
 
-short usSpeed = 150;  //default motor speed
+
+
+short usSpeed = 125;  //default motor speed
 unsigned short usMotor_Status = BRAKE;
 
 void setup()
 {
 // Serial is used for communication between node.js server and arduino
- Serial.begin(9600);
+ Serial.begin(115200);
  pinMode(MOTOR_A1_PIN, OUTPUT);
  pinMode(MOTOR_A2_PIN, OUTPUT);
  pinMode(PWM_MOTOR_1, OUTPUT);
@@ -121,15 +123,15 @@ void Stop(short usSpeed)
 {
   Serial.println("Stop");
   usMotor_Status = BRAKE;
-  motorGo(MOTOR_1, usMotor_Status, usSpeed);
-  motorGo(MOTOR_2, usMotor_Status, usSpeed);
+  motorGo(MOTOR_1, usMotor_Status, 0);
+  motorGo(MOTOR_2, usMotor_Status, 0);
 }
 void Center(short usSpeed)
 {
   Serial.println("Stop");
   usMotor_Status = BRAKE;
-  motorGo(MOTOR_1, usMotor_Status, usSpeed);
-  motorGo(MOTOR_2, usMotor_Status,  usSpeed);
+  motorGo(MOTOR_1, usMotor_Status, usSpeed*0.25);
+  motorGo(MOTOR_2, usMotor_Status,  usSpeed*0.25);
 }
 void Forward(short usSpeed)
 {
@@ -152,58 +154,52 @@ void Left(short usSpeed)
   Serial.println("Left");
   usMotor_Status = CW;
   motorGo(MOTOR_1, usMotor_Status, usSpeed*0.25 );
-  motorGo(MOTOR_2, usMotor_Status, usSpeed);
+  motorGo(MOTOR_2, usMotor_Status, 0);
 }
 
 void Right(short usSpeed)
 {
   Serial.println("Right");
   usMotor_Status = CW;
-  motorGo(MOTOR_1, usMotor_Status, usSpeed);
+  motorGo(MOTOR_1, usMotor_Status, 0);
   motorGo(MOTOR_2, usMotor_Status,usSpeed*0.25);
 }
 
 
-//Function that controls the variables: motor(0 ou 1), direction (cw ou ccw) e pwm (entra 0 e 255);
-void motorGo(uint8_t motor, uint8_t direct, uint8_t pwm)         
+void motorGo(uint8_t motor, uint8_t direct, uint8_t pwm)         //Function that controls the variables: motor(0 ou 1), direction (cw ou ccw) e pwm (entra 0 e 255);
 {
   if(motor == MOTOR_1)
   {
-     switch (direct)
-     { 
-     case  CW :
+    if(direct == CW)
+    {
+      digitalWrite(MOTOR_A1_PIN, LOW); 
+    }
+    else if(direct == CCW)
+    {
+      digitalWrite(MOTOR_A1_PIN, HIGH);
+    }
+    else
+    {
       digitalWrite(MOTOR_A1_PIN, LOW);
-      break;     
-     
-     case  CCW:
-      digitalWrite(MOTOR_A1_PIN, HIGH);    
-      break;
-      
-     case BRAKE :
-       digitalWrite(MOTOR_A1_PIN, LOW);
-       break;
-      } // direction
-       analogWrite(PWM_MOTOR_1, pwm); 
-  }  
+    }
+    
+    analogWrite(PWM_MOTOR_1, pwm); 
+  }
   else if(motor == MOTOR_2)
   {
-     switch(direct)
-     { 
-     case  CW :
+    if(direct == CW)
+    {
       digitalWrite(MOTOR_A2_PIN, LOW);
-      break;     
-     
-     case  CCW:
-      digitalWrite(MOTOR_A2_PIN, HIGH);    
-      break;
-      
-     case BRAKE :
-       digitalWrite(MOTOR_A2_PIN, LOW);
-       break;
-        } // direction
-     
-       analogWrite(PWM_MOTOR_2, pwm);     
-       }
-   
-} // MOTOR GO!
-
+    }
+    else if(direct == CCW)
+    {
+      digitalWrite(MOTOR_A2_PIN, HIGH);
+    }
+    else
+    {
+      digitalWrite(MOTOR_A2_PIN, LOW);
+    }
+    
+    analogWrite(PWM_MOTOR_2, pwm);
+  }
+}
