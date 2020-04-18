@@ -44,11 +44,21 @@
         <header>
             <h1>RANDYBot CoVid-19 V.10 </h1>
         </header>
+
         <section>
             <div class="row">
                 <div id="robot_control" class="col-md-4">
                     <p style="text-align: center; font-weight: bold">
                         <br /><br /><br /> Robot Control:<br /><br />
+                        <button type="button" id="robot_forward">Forward</button><br />
+                        <button type="button" id="robot_left">Left</button>
+                        <button type="button" id="robot_center">Center</button>
+                        <button type="button" id="robot_right">Right</button><br />
+                        <button type="button" id="robot_backward">Backward</button><br />
+                        <button type="button" id="robot_stop">Stop</button>
+                    </p>
+                    <br /><br />
+                    <p style="text-align: center; font-weight: bold">
                         <button type="button" id="robot_backward">Backward</button>
                         <button type="button" id="robot_left">Left</button>
                         <button type="button" id="robot_center">Center</button>
@@ -56,7 +66,7 @@
                         <button type="button" id="robot_forward">Forward</button>
                         <button type="button" id="robot_stop">Stop</button>
                     </p>
-                    <br /><br /><br /><br />
+                    <br /><br />
                     <p>
                         <!-- class="tab" -->
                         <p>
@@ -104,10 +114,13 @@
                     command: inCommand,
                     power: robot_drive_power
                 });
+
             }
-            
+
+
             /* Parameters/Variables */
             var socket = io.connect(document.location.href);
+
             var myId;
             socket.on('randy connected', function(data) {
                 console.log(data);
@@ -206,4 +219,5 @@
         </script>
     </div>
 </body>
+
 </html>
