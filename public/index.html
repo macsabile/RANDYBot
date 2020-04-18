@@ -48,24 +48,30 @@
         <section>
             <div class="row">
                 <div id="robot_control" class="col-md-4">
-                    <p style="text-align: center; font-weight: bold">
-                        <br /><br /><br /> Robot Control:<br /><br />
-                        <button type="button" id="robot_forward">Forward</button><br />
-                        <button type="button" id="robot_left">Left</button>
-                        <button type="button" id="robot_center">Center</button>
-                        <button type="button" id="robot_right">Right</button><br />
-                        <button type="button" id="robot_backward">Backward</button><br />
-                        <button type="button" id="robot_stop">Stop</button>
-                    </p>
-                    <br /><br />
-                    <p style="text-align: center; font-weight: bold">
-                        <button type="button" id="robot_armBackward">Backward</button>
-                        <button type="button" id="robot_armLeft">Left</button>
-                        <button type="button" id="robot_armCenter">Center</button>
-                        <button type="button" id="robot_armRight">Right</button>
-                        <button type="button" id="robot_armForward">Forward</button>
-                        <button type="button" id="robot_armStop">Stop</button>
-                    </p>
+
+                    <div class="outside">
+                        <div class="inner">
+                            <p style="text-align: center; font-weight: bold">
+                                Robot Control:<br /><br />
+                                <button type="button" id="robot_forward">Forward</button><br />
+                                <button type="button" id="robot_left">Left</button>
+                                <button type="button" id="robot_center">Center</button>
+                                <button type="button" id="robot_right">Right</button><br />
+                                <button type="button" id="robot_backward">Backward</button><br />
+                                <button type="button" id="robot_stop">Stop</button>
+                            </p>
+                        </div>
+                        <div class="inner-arm">
+                            <p style="text-align: center; font-weight: bold">
+                                <button type="button" id="robot_armBackward">Backward</button>
+                                <button type="button" id="robot_armLeft">Left</button>
+                                <button type="button" id="robot_armCenter">Center</button>
+                                <button type="button" id="robot_armRight">Right</button>
+                                <button type="button" id="robot_armForward">Forward</button>
+                                <button type="button" id="robot_armStop">Stop</button>
+                            </p>
+                        </div>
+                    </div>
                     <br /><br />
                     <p>
                         <!-- class="tab" -->
@@ -88,7 +94,7 @@
                 <div class="col-md-8">
                     <div id="container">
                         <!--   <div id="remote">-->
-                        <video id="remote-video" autoplay="" style="border:1px solid" width="640" height="480">
+                        <video id="remote-video" autoplay="" style="border:1px solid" width="100%" height="480">
 											source = http://localhost:8050/stream							
 										Your browser does not support the video tag.
 									  </video>

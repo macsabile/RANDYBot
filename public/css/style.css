@@ -1,8 +1,8 @@
 header {
     color: #f6931f;
     text-shadow: 0 0 5px #f66f1f, 0 0 10px #f66f1f,
-             0 0 20px #f66f1f, 0 0 30px #f66f1f,
-             0 0 40px #f66f1f;
+    0 0 20px #f66f1f, 0 0 30px #f66f1f,
+    0 0 40px #f66f1f;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     background-color: #545454;
@@ -14,8 +14,8 @@ header {
 }
 
 body {
-	margin: 0px;
-	padding: 0px;
+    margin: 0px;
+    padding: 0px;
 }
 
 section {
@@ -32,3 +32,22 @@ section {
 .tab {
     margin-left: 20%;
 }
+
+.outside {
+    border: 1px solid blue;
+}
+
+.inner {
+    border: 5px solid lightblue;
+    margin: 15px 15px;
+    padding: 5px;
+}
+
+.inner-arm {
+    border: 5px solid lightblue;
+    margin: 15px 15px;
+    padding: 5px;
+}
+
+    .container {
+        width: 100%!Important;
