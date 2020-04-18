@@ -34,20 +34,21 @@ section {
 }
 
 .outside {
-    border: 1px solid blue;
+    border: 5px solid blue;
 }
 
 .inner {
-    border: 5px solid lightblue;
+    border: 5px solid #00a2e8;
     margin: 15px 15px;
     padding: 5px;
 }
 
 .inner-arm {
-    border: 5px solid lightblue;
+    border: 5px solid #00a2e8;
     margin: 15px 15px;
     padding: 5px;
 }
 
-    .container {
-        width: 100%!Important;
+.container {
+    width: 100%!Important;
+}

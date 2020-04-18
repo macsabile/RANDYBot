@@ -44,11 +44,9 @@
         <header>
             <h1>RANDYBot CoVid-19 V.10 </h1>
         </header>
-
         <section>
             <div class="row">
                 <div id="robot_control" class="col-md-4">
-
                     <div class="outside">
                         <div class="inner">
                             <p style="text-align: center; font-weight: bold">
@@ -74,21 +72,14 @@
                     </div>
                     <br /><br />
                     <p>
-                        <!-- class="tab" -->
-                        <p>
-                            <label for="drive_power">Robot Drive Power:</label>
-                            <input type="text" id="drive_power" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                        </p>
-                        <div id="drive_power_slider"></div>
-
-                        <br /><br />
-
-                        <!--        Insert                           -->
-                        <!--        Insert                           -->
-
-                        LED Control:<br />
-                        <input type='text' class="basic" />
-                        <button type="button" id="off">Off</button>
+                        <label for="drive_power">Robot Drive Power:</label>
+                        <input type="text" id="drive_power" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                    </p>
+                    <div id="drive_power_slider"></div>
+                    <br />
+                    <br /> LED Control:<br />
+                    <input type='text' class="basic" />
+                    <button type="button" id="off">Off</button>
                     </p>
                 </div>
                 <div class="col-md-8">
@@ -98,7 +89,6 @@
 											source = http://localhost:8050/stream							
 										Your browser does not support the video tag.
 									  </video>
-                        <!--  </div> -->
                     </div>
 
                     <div id="controls">
@@ -120,9 +110,7 @@
                     command: inCommand,
                     power: robot_drive_power
                 });
-
             }
-
 
             /* Parameters/Variables */
             var socket = io.connect(document.location.href);
@@ -225,5 +213,4 @@
         </script>
     </div>
 </body>
-
 </html>
