@@ -1,214 +1,209 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <title>RANDYBot CoVid-19</title>
-  <meta charset="utf-8"/>
-  <meta name="author" content="Christopher Coballes"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>RANDYBot CoVid-19</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Christopher Coballes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link rel="stylesheet" type="text/css" href="css/jquery-ui.css"/>
-  <link rel="stylesheet" type="text/css" href="css/rangeslider.css">
-  <link rel="stylesheet" type="text/css" href="css/default.css"/>
-  <link rel="stylesheet" href="css/style.css"/> 
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="css/rangeslider.css">
+    <link rel="stylesheet" type="text/css" href="css/default.css" />
+    <link rel="stylesheet" href="css/style.css" />
 
- <!-- Use Slider -->
-  <script type="text/javascript" src="js/slider/jquery.min.js"></script>
-  <script type="text/javascript" src="js/slider/rangeslider.js"></script>
-  <script type="text/javascript" src="js/slider/rangeslider.min.js"></script>
-  <script type="text/javascript" src="js/slider/slider.js"></script>
+    <!-- Use Slider -->
+    <script type="text/javascript" src="js/slider/jquery.min.js"></script>
+    <script type="text/javascript" src="js/slider/rangeslider.js"></script>
+    <script type="text/javascript" src="js/slider/rangeslider.min.js"></script>
+    <script type="text/javascript" src="js/slider/slider.js"></script>
 
-  <!-- Include JQuery for interface -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="css/jquery-ui.min.css"/>
+    <!-- Include JQuery for interface -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui.min.css" />
 
-  <!-- Include Bootstrap -->
-  <script src="js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <!-- Include Bootstrap -->
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
 
-  <!-- Use Spectrum to control LED color -->
-  <script src="js/spectrum.js"></script>
-  <link rel="stylesheet" href="css/spectrum.css"/>
+    <!-- Use Spectrum to control LED color -->
+    <script src="js/spectrum.js"></script>
+    <link rel="stylesheet" href="css/spectrum.css" />
 
-  <!-- Use websockets to send user commands to server -->
-  <script src="socket.io/socket.io.js"></script>
+    <!-- Use websockets to send user commands to server -->
+    <script src="socket.io/socket.io.js"></script>
 
-  <!-- Use webrtc for video streaming -->
-  <script src="js/webrtc.js"></script>
+    <!-- Use webrtc for video streaming -->
+    <script src="js/webrtc.js"></script>
 
 </head>
 
 <body>
-  <div class="container">
-    <header>
-      <h1>RANDYBot CoVid-19 V.10 </h1>
-    </header>
+    <div class="container">
+        <header>
+            <h1>RANDYBot CoVid-19 V.10 </h1>
+        </header>
+        <section>
+            <div class="row">
+                <div id="robot_control" class="col-md-4">
+                    <p style="text-align: center; font-weight: bold">
+                        <br /><br /><br /> Robot Control:<br /><br />
+                        <button type="button" id="robot_backward">Backward</button>
+                        <button type="button" id="robot_left">Left</button>
+                        <button type="button" id="robot_center">Center</button>
+                        <button type="button" id="robot_right">Right</button>
+                        <button type="button" id="robot_forward">Forward</button>
+                        <button type="button" id="robot_stop">Stop</button>
+                    </p>
+                    <br /><br /><br /><br />
+                    <p>
+                        <!-- class="tab" -->
+                        <p>
+                            <label for="drive_power">Robot Drive Power:</label>
+                            <input type="text" id="drive_power" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                        </p>
+                        <div id="drive_power_slider"></div>
 
-			<section>
-			  <div class="row">
-						<div id="robot_control" class="col-md-4">  
-								  <p style = "text-align: center; font-weight: bold">
-									<br /><br /><br />
-									Robot Control:<br /><br />
-									  <button type="button" id="robot_forward">Forward</button><br />
-									  <button type="button" id="robot_left">Left</button>
-									  <button type="button" id="robot_center">Center</button>
-									  <button type="button" id="robot_right">Right</button><br />
-									  <button type="button" id="robot_backward">Backward</button><br />
-									  <button type="button" id="robot_stop">Stop</button>
-								  </p>
-								  <br /><br /><br /><br />
-								  <p> <!-- class="tab" -->
-									<p>
-									  <label for="drive_power">Robot Drive Power:</label>
-									  <input type="text" id="drive_power" readonly style="border:0; color:#f6931f; font-weight:bold;">
-									</p>
-									<div id="drive_power_slider"></div>
-									
-									<br /><br />
+                        <br /><br />
 
-  								     <!--        Insert                           -->
-                                                                     <!--        Insert                           -->  
-                                                            
-									LED Control:<br /> 
-									  <input type='text' class="basic" />
-									  <button type="button" id="off">Off</button>
-								  </p>
-								</div>
-								<div class="col-md-8">
-								  <div id="container">
-								 <!--   <div id="remote">-->
-									  <video id="remote-video" autoplay="" style="border:1px solid" width="640" height="480">
+                        <!--        Insert                           -->
+                        <!--        Insert                           -->
+
+                        LED Control:<br />
+                        <input type='text' class="basic" />
+                        <button type="button" id="off">Off</button>
+                    </p>
+                </div>
+                <div class="col-md-8">
+                    <div id="container">
+                        <!--   <div id="remote">-->
+                        <video id="remote-video" autoplay="" style="border:1px solid" width="640" height="480">
 											source = http://localhost:8050/stream							
 										Your browser does not support the video tag.
 									  </video>
-								  <!--  </div> -->
-								  </div>  
+                        <!--  </div> -->
+                    </div>
 
-								  <div id="controls">
-									Signalling Server Address: <input required="" id="signalling_server" value="" title="<host>:<port>, default address is autodetected" type="text"><br />
-								  <!--  <input id="twoway_audio" name="twoway_audio" value="0" title="stream from a local audio input source (e.g. microphone) to the remote peer" type="checkbox">enable two-way audio<br />
+                    <div id="controls">
+                        Signalling Server Address: <input required="" id="signalling_server" value="" title="<host>:<port>, default address is autodetected" type="text"><br />
+                        <!--  <input id="twoway_audio" name="twoway_audio" value="0" title="stream from a local audio input source (e.g. microphone) to the remote peer" type="checkbox">enable two-way audio<br />
 									<button id="start" onclick="start();">Start</button>
 									<button disabled="" id="stop" onclick="stop();">Stop</button>
 									<button id="mute" onclick="mute();">Mute/Unmute</button>  -->
 
-									<!--<button id="fullscreen" onclick="fullscreen();">Fullscreen</button>-->
-								  </div>
-								</div>
-					  </div>
-			 </section>
-			<script>
-                                           
-                                         function emitNode(inCommand)
-                                         {
-                                           var robot_drive_power = $( "#drive_power_slider" ).slider( "value" );
-								socket.emit('randy command', { 
-									command: inCommand, 
-									power: robot_drive_power 
-								});
+                        <!--<button id="fullscreen" onclick="fullscreen();">Fullscreen</button>-->
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script>
+            function emitNode(inCommand) {
+                var robot_drive_power = $("#drive_power_slider").slider("value");
+                socket.emit('randy command', {
+                    command: inCommand,
+                    power: robot_drive_power
+                });
+            }
+            
+            /* Parameters/Variables */
+            var socket = io.connect(document.location.href);
+            var myId;
+            socket.on('randy connected', function(data) {
+                console.log(data);
+                // Send out a message to the server
+                socket.emit('randy command', {
+                    command: 'waithing'
+                });
+            });
 
-                                            }
+            // These buttons control the movement of the robot
+            $('#robot_forward').mousedown(function() {
+                console.log("Button Pressed");
+                emitNode('forward');
+            }).mouseup(function() {
+                console.log("Button Released");
+                emitNode('stop');
+            });
 
+            $('#robot_left').mousedown(function() {
+                console.log("Button Pressed");
+                emitNode('left');
+            }).mouseup(function() {
+                console.log("Button Released");
+                emitNode('stop');
+            });
 
-					/* Parameters/Variables */
-					   var socket = io.connect(document.location.href);
+            $('#robot_center').mousedown(function() {
+                console.log("Button Pressed");
+                emitNode('center');
+            }).mouseup(function() {
+                console.log("Button Released");
+                emitNode('stop');
+            });
 
-					   var myId;
-						 socket.on('randy connected', function (data) {
-								console.log(data);
-								// Send out a message to the server
-								socket.emit('randy command', { command: 'waithing' });
-							});
+            $('#robot_stop').click(function() {
+                console.log("Button Clicked");
+                emitNode('stop');
+            });
 
-							// These buttons control the movement of the robot
-							$('#robot_forward').mousedown(function () {
-								console.log("Button Pressed");
-                                                                    emitNode('forward');
-							}).mouseup(function () {
-								console.log("Button Released");
-								emitNode('stop');    
-							});
+            $('#robot_right').mousedown(function() {
+                console.log("Button Pressed");
+                emitNode('right');
+            }).mouseup(function() {
+                console.log("Button Released");
+                emitNode('stop');
+            });
 
-							$('#robot_left').mousedown(function () {
-								console.log("Button Pressed");
-								emitNode('left');
-							}).mouseup(function () {
-								console.log("Button Released");
-								emitNode('stop');          
-							});
+            $('#robot_backward').mousedown(function() {
+                console.log("Button Pressed");
+                emitNode('backward');
+            }).mouseup(function() {
+                emitNode('stop');
+            }); // okay na Mac!
 
-						$('#robot_center').mousedown(function () {
-								console.log("Button Pressed");
-								emitNode('center');
-							}).mouseup(function () {
-								console.log("Button Released");
-								emitNode('stop');       
-							});
+            $(function() {
+                $("#drive_power_slider").slider({
+                    range: "min",
+                    value: 70,
+                    min: 0,
+                    max: 150,
+                    slide: function(event, ui) {
+                        $("#drive_power").val(ui.value);
+                        var robot_drive_power = ui.value;
+                        socket.emit('randy command', {
+                            command: 'set_power',
+                            power: robot_drive_power
+                        });
+                    }
+                });
+                $("#drive_power").val($("#drive_power_slider").slider("value"));
+            }); // slider1
 
-							$('#robot_stop').click(function () {
-								console.log("Button Clicked");
-								emitNode('stop');  
-							});
+            // Control LED Color
+            $(".basic").spectrum({
+                color: "#000",
+                change: function(color) {
+                    socket.emit('randy command', {
+                        command: 'LED',
+                        red: color._r,
+                        green: color._g,
+                        blue: color._b
+                    });
+                }
+            });
+            $('#off').click(function() {
+                console.log("Button Clicked");
+                socket.emit('randy command', {
+                    command: 'LED',
+                    red: 0,
+                    green: 0,
+                    blue: 0
+                });
+            });
 
-							$('#robot_right').mousedown(function () {
-								console.log("Button Pressed");
-								emitNode('right');
-							}).mouseup(function () {
-								console.log("Button Released");
-								emitNode('stop');          
-							});
-
-							$('#robot_backward').mousedown(function () {
-								console.log("Button Pressed");
-								emitNode('backward');
-							}).mouseup(function () {
-								emitNode('stop');
-				            }); // okay na Mac!
-				            
-							$(function() {
-								$( "#drive_power_slider" ).slider({
-									range: "min",
-									value: 70,
-									min: 0,
-									max: 150,
-									slide: function( event, ui ) {
-										$( "#drive_power" ).val( ui.value );
-									var robot_drive_power= ui.value;
-                                                                         socket.emit('randy command', { 
-									    command: 'set_power', 
-									    power: robot_drive_power  
-								               });
-									     }
-								        });
-                                                             	$( "#drive_power" ).val( $( "#drive_power_slider" ).slider( "value" ) );
-							        });  // slider1
-
-                                			// Control LED Color
-							$(".basic").spectrum({
-								color: "#000",
-								change: function (color) {
-									socket.emit('randy command', { 
-										command: 'LED', 
-										red: color._r, 
-										green: color._g,
-										blue: color._b
-									});
-								}
-							});
-							$('#off').click(function () {
-								console.log("Button Clicked");
-								socket.emit('randy command', { 
-									command: 'LED', 
-									red: 0, 
-									green: 0,
-									blue: 0
-								});
-							});
-					
-  //-------------------------------------------------------------------SLIDER-----------------------------------------------------------  
-                                                  
-					
-	</script>
-  </div>
+            //-------------------------------------------------------------------SLIDER-----------------------------------------------------------
+        </script>
+    </div>
 </body>
 </html>
